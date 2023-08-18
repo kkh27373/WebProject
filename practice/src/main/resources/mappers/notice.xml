@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.practice.user.NoticeRepository">
+	<insert id="saveNotice" parameterType="com.example.practice.user.Notice">
+	insert into
+		notice
+	values(
+		0,
+		#{notice_title},
+		0,
+		#{notice_content},
+		now(),
+		now()
+	);
+	</insert>
+	
+	<select id="getNoticeList" parameterType="Integer" resultType="com.example.practice.user.Notice">
+	select
+		n.notice_code,
+		n.notice_title,
+		u.user_code,
+		n.notice_content,
+		u.user_name,
+		n.create_date
+	from
+		notice n
+		left outer join user u on(u.user_code = n.user_code)
+	order by
+		n.notice_code desc
+	limit
+		#{index}, 10
+   </select>
+   
+   <update id="findNoticeCode" parameterType="com.example.practice.user.Notice">
+		UPDATE
+			notice
+		SET
+			notice_title = #{notice_title},
+			notice_content = #{notice_content}
+		WHERE
+			notice_code = #{notice_code};
+   </update>
+   
+   	<delete id="remove" parameterType="Integer">
+		delete
+		from
+			notice
+		where
+			notice_code = #{notice_code}
+	</delete>
+</mapper>
